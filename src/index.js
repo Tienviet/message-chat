@@ -1,26 +1,21 @@
 var express = require('express');
 import ConnectDB from "./config/conectDB";
-import ContactModel from "../models/contact.model";
+import configView from "./config/viewEngine";
 
 var app = express();
 
 //Connect to DB
 ConnectDB();
 
-app.get('/hello', async (req, res) => {
-  try {
-    let item = {
-      userId: '1324244',
-      contactId: "5345345535",
-    };
-    console.log(ContactModel.createNew(item))
-    let contact = await ContactModel.createNew(item);
-    res.send(contact);
-  } catch (e) {
-
-  }
+// Config view engine
+configView(app);
+app.get('/', (req, res) => {
+  return res.render("main/master");
+});
+app.get('/login-register', (req, res) => {
+  return res.render("auth/loginRegister");
 });
 
 app.listen(process.env.APP_PORT, process.env.APP_HOST, () => {
-  console.log('success', process.env.APP_PORT);
+  console.log('success', process.env.DB_CONNECTION);
 });
